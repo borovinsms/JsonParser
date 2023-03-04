@@ -13,7 +13,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.FileReader;
@@ -24,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-    private static List<Employee> parseCSV(String[] columnMapping, String fileName) {
+    public static List<Employee> parseCSV(String[] columnMapping, String fileName) {
         try {
             try (FileReader fileReader = new FileReader(fileName)) {
                 CSVReader csvReader = new CSVReader(fileReader);
@@ -41,7 +40,7 @@ public class Main {
 
     }
 
-    private static List<Employee> parseXML(String fileName) {
+    public static List<Employee> parseXML(String fileName) {
         try {
             List<Employee> resultList = new ArrayList<>();
             Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(fileName);
@@ -61,24 +60,20 @@ public class Main {
                 }
             }
             return resultList;
-        } catch (SAXException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ParserConfigurationException e) {
+        } catch (SAXException | IOException | ParserConfigurationException e) {
             throw new RuntimeException(e);
         }
 
     }
 
-    private static String listToJson(List<Employee> list) {
+    public static String listToJson(List<Employee> list) {
         Type listType = new TypeToken<List<Employee>>() {
         }.getType();
         Gson gson = new GsonBuilder().create();
         return gson.toJson(list, listType);
     }
 
-    private static void writeString(String json, String fileName) {
+    public static void writeString(String json, String fileName) {
         try {
             try (FileWriter fileWriter = new FileWriter(fileName)) {
                 fileWriter.write(json);
